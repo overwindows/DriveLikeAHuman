@@ -1,0 +1,32 @@
+{
+  "name": "tigertank-autonomous",
+  "version": "0.1.0",
+  "description": "Autonomous AI for Tiger Tank (YouTube Playables) using Playwright + Laya.js scene graph introspection",
+  "main": "play_tigertank30.js",
+  "scripts": {
+    "run": "node play_tigertank30.js",
+    "run:v26": "node play_tigertank26.js",
+    "run:v27": "node play_tigertank27.js",
+    "run:v28": "node play_tigertank28.js",
+    "run:v29": "node play_tigertank29.js",
+    "run:v30": "node play_tigertank30.js",
+    "run:all": "node run_all.js",
+    "compare": "node compare_results.js",
+    "explore": "node explore_scene.js"
+  },
+  "keywords": [
+    "game-ai",
+    "playwright",
+    "laya.js",
+    "autonomous-play",
+    "heuristics"
+  ],
+  "author": "snova-chenw",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
