@@ -164,5 +164,13 @@ config.yaml
 log.txt
 
 results-video/
- 
 results-db/
+
+# Tiger Tank RL run artifacts
+tigertank/rl/__pycache__/
+tigertank/rl/logs/
+tigertank/rl/models_*/
+tigertank/rl/videos_*/
+tigertank/rl/tb_logs*/
+tigertank/rl/*.v*_backup
+tigertank/rl/gameover_capture/
