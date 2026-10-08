@@ -15,6 +15,7 @@ from stable_baselines3.common.callbacks import (
     BaseCallback,
 )
 from stable_baselines3.common.monitor import Monitor
+import torch
 
 from environment import make_env, TigerTankEnv
 
@@ -87,7 +88,7 @@ def train(
             ent_coef=lambda progress: 0.05 - 0.045 * progress,
             verbose=1,
             tensorboard_log=log_dir,
-            device="cuda",
+            device="cuda" if torch.cuda.is_available() else "cpu",
             policy_kwargs={
                 "net_arch": dict(pi=[64, 64], vf=[128, 128])
             },
@@ -110,7 +111,6 @@ def train(
         model.learn(
             total_timesteps=total_timesteps,
             callback=[checkpoint_callback, ticker_callback],
-            progress_bar=True,
         )
     except KeyboardInterrupt:
         print("\nTraining interrupted by user.")

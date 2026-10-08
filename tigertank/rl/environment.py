@@ -68,7 +68,7 @@ class TigerTankEnv(gym.Env):
         headless: bool = True,
         max_ticks: int = 200,
         tick_ms: int = 350,
-        chrome_path: str = "/usr/bin/google-chrome",
+        chrome_path: Optional[str] = None,
         rank: int = 0,
         record_video: bool = False,
         video_dir: str = "./videos",
@@ -100,6 +100,9 @@ class TigerTankEnv(gym.Env):
         self._ctx: Optional[BrowserContext] = None
         self._page: Optional[Page] = None
 
+        if chrome_path is None:
+            chrome_path = self._find_browser()
+
         # Episode state
         self._tick_count = 0
         self._prev_hp = 180
@@ -115,6 +118,31 @@ class TigerTankEnv(gym.Env):
         self._stuck_counter = 0
         self._prev_pos_for_stuck = None
         self._friendly_damage_dealt = 0.0
+
+    @staticmethod
+    def _find_browser():
+        """Locate an installed Chromium-family executable across OSes."""
+        import shutil, os
+        candidates = [
+            os.environ.get("CHROME_PATH"),
+            "/usr/bin/google-chrome",
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
+            r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+            r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+            os.path.join(os.environ.get("LOCALAPPDATA", ""), "Google", "Chrome", "Application", "chrome.exe"),
+            r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+            r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        ]
+        for c in candidates:
+            if c and os.path.exists(c):
+                return c
+        # Fall back to shutil resolution
+        for name in ("google-chrome", "chromium", "chromium-browser", "msedge", "chrome"):
+            p = shutil.which(name)
+            if p:
+                return p
+        raise RuntimeError("No Chromium-family browser found. Set CHROME_PATH.")
 
     def _launch_browser(self):
         """Launch Playwright browser and navigate to game."""
